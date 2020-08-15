@@ -2,9 +2,9 @@
 
 # para carregar arquivos
 library(readr)
-OrganizadoraDeEventos201904TrimestreCadasturPJ <- read_delim("OrganizadoraDeEventos201904TrimestreCadasturPJ.csv", 
-                                                               +     ";", escape_double = FALSE, locale = locale(encoding = "WINDOWS-1252"), 
-                                                               +     trim_ws = TRUE)
+Organizadores <- read_delim("OrganizadoraDeEventos201904TrimestreCadasturPJ.csv",";", 
+                            escape_double = FALSE, locale = locale(encoding = "WINDOWS-1252"),
+                            trim_ws = TRUE)
 
 # filtrando por estado e por localicade e gerando um grafico de colunas
 teste %>% 
@@ -32,4 +32,14 @@ year(today())-year(teste$`Data de Inicio da Operação`)
 Sys.Date() # ou
 today()
 
+# verificar quantas empresas realizam cada tipo de evento 
+library(stringr)
+
+teste$ec<- str_detect(teste$`Tipo de Evento`, pattern = "Comercial")
+teste$ecul<- str_detect(teste$`Tipo de Evento`, pattern = "Cultural") # e assim por diante
+
+# contando o numero de empresas por localidade que realizam certo tipo de evento
+teste %>% 
+  filter(UF=="RS" & es==TRUE) %>% 
+  count(Localidade) 
 
