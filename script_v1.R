@@ -6,7 +6,21 @@ Organizadores <- read_delim("OrganizadoraDeEventos201904TrimestreCadasturPJ.csv"
                             escape_double = FALSE, locale = locale(encoding = "WINDOWS-1252"),
                             trim_ws = TRUE)
 
+# carregando packages
+library(dplyr)
+library(ggplot2)
+
+# ajustando o tipo de variável
+
+teste<- teste %>% 
+  mutate(Porte=as.factor(Porte)) %>% 
+  mutate(Situação=as.factor(Situação)) %>% 
+  mutate(UF=as.factor(UF)) %>% 
+  mutate(Localidade=as.factor(Localidade)) %>% 
+  mutate('Natureza Jurídica'=as.factor('Natureza Jurídica'))
+
 # filtrando por estado e por localicade e gerando um grafico de colunas
+
 teste %>% 
   filter(UF=="RS") %>% 
   group_by(Localidade) %>% 
@@ -21,7 +35,7 @@ teste %>%
 # calcular o tempo de funcionamento em anos
 library(lubridate)
 
-teste$`Data de Inicio da Operação`<- dmy(teste$`Data de Inicio da Operação`)
+teste$`Data de Inicio da Operação`<- dmy(teste$`Data de Inicio da Operação`) # mudando formato da data
 
 as.duration(today()-teste$`Data de Inicio da Operação`) # ou também
 
@@ -40,6 +54,6 @@ teste$ecul<- str_detect(teste$`Tipo de Evento`, pattern = "Cultural") # e assim 
 
 # contando o numero de empresas por localidade que realizam certo tipo de evento
 teste %>% 
-  filter(UF=="RS" & es==TRUE) %>% 
+  filter(UF=="RS" & ec==TRUE) %>% 
   count(Localidade) 
 
